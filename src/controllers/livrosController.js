@@ -55,6 +55,14 @@ class LivroController {
       res.status(200).send({ message: "excluido com sucesso" });
     });
   };
+
+  static listarLivroPortEditora = (req, res) => {
+    const { editora } = req.query;
+
+    livros.find({ editora: editora }, {}, (err, livros) => {
+      res.status(200).send(livros);
+    });
+  };
 }
 
 export default LivroController;
