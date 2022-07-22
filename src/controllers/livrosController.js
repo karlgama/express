@@ -7,6 +7,17 @@ class LivroController {
     });
   };
 
+  static listarLivroPorId = (req, res) => {
+    const { id } = req.params;
+    livros.findById(id, (err, livros) => {
+      if (err)
+        return res
+          .status(404)
+          .send({ message: `${err.message} id não encontrado` });
+      return res.status(200).send(livros);
+    });
+  };
+
   static cadastrarLivro = (req, res) => {
     let livro = new livros(req.body);
 
@@ -21,7 +32,23 @@ class LivroController {
     });
   };
 
-  static atualizarLivro = (req, res) => {};
+  static atualizarLivro = (req, res) => {
+    const { id } = req.params;
+    livros.findByIdAndUpdate(id, { $set: req.body }, (err) => {
+      if (!err)
+        return res.status(200).send({ message: "atualizado com sucesso" });
+      return res.status(500).send({ message: err.message });
+    });
+  };
+
+  static excluirLivro = (req, res) => {
+    const { id } = req.params;
+
+    livros.findByIdAndDelete(id, (err) => {
+      if (err) res.status(500).send({ message: err.message });
+      res.status(200).send({ message: "excluido com sucesso" });
+    });
+  };
 }
 
 export default LivroController;
